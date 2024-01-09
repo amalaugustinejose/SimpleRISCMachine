@@ -1,0 +1,14 @@
+#Move Data 0xff (255) to R0
+#MOV R0 FF
+#0x01 100 3FF
+011003FF 
+
+#Store data in Register 0 to offset0x32
+#STR R0 @offset0x32
+#0X07 100 232
+07100232
+
+#Load data in offset0x32 to Register 1
+#LOD R1 @osffset0x32
+#0x06 101 232
+06101232
