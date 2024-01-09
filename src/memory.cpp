@@ -36,14 +36,17 @@ uint32_t Memory::codeRead(int offset) {
 
 void Memory::codeWrite(int offset, uint32_t data) {
     if (isValidCodeAddr(offset)) {
+        memoryCost += MEMORY_COST_STORED_INSTRUCTIONS;
         *(codeBaseAddr + offset) = data;
         storedCode++;
+        //std::cout << memoryCost << ' ' << storedCode << std::endl;
     } else
         std::cout << "Memory::codeWrite Invalid offset" << std::endl;
 }
 
 uint8_t Memory::dataRead(int offset) {
     if (isValidDataAddr(offset)) {
+        memoryCost += MEMORY_COST_CACHE_HIT;
         std::cout << "Memory::dataRead @" << offset << ' ' << (int) *(dataBaseAddr + offset) << std::endl;
         return *(dataBaseAddr + offset);
     } else
@@ -53,6 +56,7 @@ uint8_t Memory::dataRead(int offset) {
 
 void Memory::dataWrite(int offset, uint8_t data) {
     if (isValidDataAddr(offset)) {
+        memoryCost += MEMORY_COST_CACHE_HIT;
         *(dataBaseAddr + offset) = data;
         std::cout << "Memory::dataWrite @" << offset << ' ' << (int) data << ' ' << (int) *(dataBaseAddr + offset) << std::endl;
     } else
@@ -61,6 +65,7 @@ void Memory::dataWrite(int offset, uint8_t data) {
 
 void Memory::addJumpOffset(uint32_t label, int offset) {
     //std::cout << "Memory::addJumpOffset" << (int) label << std:: endl;
+    memoryCost += MEMORY_COST_STORED_LABEL;
     jumpOffsets[label] = offset;
 }
 

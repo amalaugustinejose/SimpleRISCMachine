@@ -7,6 +7,11 @@
 #define MAX_CODE_SIZE MAX_CODE_LINES * MAX_LINE_LENGTH
 #define MAX_DATA_SIZE 0xFF + 1
 
+#define MEMORY_COST_STORED_LABEL 1
+#define MEMORY_COST_STORED_INSTRUCTIONS 1
+#define MEMORY_COST_CACHE_HIT 1
+#define MEMORY_COST_CACHE_MISS 2
+
 class Memory {
 private:
     uint32_t *codeBaseAddr;
@@ -19,6 +24,8 @@ private:
 
 public:
     int storedCode;
+    int memoryCost;
+
     Memory();
     ~Memory();
 

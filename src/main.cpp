@@ -17,7 +17,8 @@ int main(int argc, char *argv[]) {
     cpu.storeInputProgram(fileName);
     //cpu.readStoredProgram();
     //cpu.startExecution();
-    std::cout << std::hex << cpu.executeAndDump() << endl;
+    uint64_t regDump = cpu.executeAndDump();
+    std::cout << "Reg Dump: 0x" << std::hex << regDump << endl;
 
     return 0;
 }

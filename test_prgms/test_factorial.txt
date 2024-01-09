@@ -1,4 +1,4 @@
-#MOV R0 5
+#MOV R0 5 //  What's 5! (Since the system limit is FF, 6!+ not possible)
 #0x01 100 305
 01100305
 
@@ -28,6 +28,6 @@ FF001000
 #0x05 100 001
 05100001
 
-#MOV R3 R1 // Move result to R3
+#MOV R0 R1 // Move result to R0
 #0x01 102 101
 01103101

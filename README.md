@@ -159,3 +159,49 @@ Most of the functions are with self explanatory fuction names. But the gist of i
 4. Remove 8 bit data limitation for memory and registers. This could mean a redesign for instruction decode and result packing functions and making accomodations for it in the operations.
 5. Support for signed integers, this could mean proper use of N (Negative) and V (Signed Oveflow) status register and improved scope for the system.
 6. Seperate the operations in CPU class to something like ALU to just handle the operations and let the CPU class to just deal with instruction decode and result packing.
+
+## Few Question and Answers (Not a FAQ)
+
+### 1. How do we implenet a LinkedList here?
+Since the system works on a simple system of offsets for the code execution as well as for the memory, all it needs is to pack the offset to the next node in the current node.
+
+Below is the representattion of a cycle with three Nodes.
+
+    Node 1 @x16 {
+        Val
+        Next -> 0x32
+    }
+
+    Node 2 @x32 {
+        Val
+        Next -> 0x64
+    }
+
+    Node 3 @x64 {
+        Val
+        Next -> 0x16
+    }
+
+For this to be actually implemented, the system needs to add more instructions to load and store data of different sizes, not just single byte data operations as in current system. Also a memory allocation mechanism to provide the offsets would facilitate dynamically finding and filling the offsets.
+
+### 2. Cash implmentation and how?
+Why not use LRU (Least Recently Used) and see. Yet to be implemented. Depeding on time.
+
+### 3. Metric to cost the program in terms of compute + memory
+Different approches can be used to cost the program. One of the easiest would be to associate eash type of operation with an assocaited cost.
+    
+    Single Register Ops - 1U
+    Register Register   - 2U
+    Register Data       - 3U
+    Load and Store Ops  - 4U
+    
+Similary a similar system can also be used to where memory operations associated with a similar associated cose
+
+    Read / Write Cache Hit      - 1U
+    Read / Write Cache Miss     - 2U
+    Fresh Allocations           - 2U
+    Fresh Allocation Cash Full  - 3U
+    Per Stored Instruction      - 1U
+    Per Stored Label            - 1U
+
+A Running tally can be kept to add up these costs and give it out at the end of execution. This in conjuction with pure runtime on the hardware in which it is executed can give a decent measure of relative cost between programs. 

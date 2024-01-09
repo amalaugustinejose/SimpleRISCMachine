@@ -6,10 +6,10 @@
 #0x01 103 355
 01103355
 
-#OR R2 0x55 Should output FF
+#OR R2 0x55 // Should output FF
 #0x0D 102 355
 0D102355
 
-#OR R3 0xAA Should output FF
+#OR R3 0xAA // Should output FF
 #0x0D 103 3AA
 0D1033AA

@@ -6,10 +6,10 @@
 #0x01 101 355
 01101355
 
-#AND R0 0x55 Should output 0
+#AND R0 0x55 // Should output 0
 #0x0C 100 355
 0C100355
 
-#AND R1 0xAA Should output 0
+#AND R1 0xAA // Should output 0
 #0x0C 101 3AA
 0C1013AA

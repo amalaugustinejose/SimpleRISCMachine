@@ -1,6 +1,6 @@
-#MOV R0 0x63
+#MOV R0 0x63 // What's the number of digits in 99 0x63
 #0x01 100 363
-01100363
+01100333
 
 #MOV R1 0x0
 #0x01 101 300
@@ -22,6 +22,6 @@ FF001000
 #0x05 100 001
 05100001
 
-#MOV R3 R1
-0x01 103 101
-01103101
+#MOV R0 R1 // Move result to R0
+0x01 100 101
+01100101

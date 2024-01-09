@@ -6,6 +6,12 @@
 
 #define CPU_DATA_REGISTER_COUNT 4 // 2 bit addressing
 #define CPU_STATUS_REGISTER_COUNT 4 // 2 bit addressing
+
+#define COMPUTE_COST_REG_SINGLE 1
+#define COMPUTE_COST_REG_REG 2
+#define COMPUTE_COST_REG_DATA 3
+#define COMPUTE_COST_REG_MEM 4
+
 class Cpu {
 private:
     Memory mem;
@@ -14,6 +20,7 @@ private:
     uint8_t statusRegs[CPU_STATUS_REGISTER_COUNT];
     int programCounter; // to facilitate JMPS
     int watchDog = MAX_CODE_LINES * 0xff; // to avoid infitnite loops
+    int computeCost;
     
     void mov(uint32_t op);
     void add(uint32_t op);

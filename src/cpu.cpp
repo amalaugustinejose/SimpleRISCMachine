@@ -1,4 +1,6 @@
 #include <iostream>
+#include <sys/time.h>
+#include <iomanip>
 #include "cpu.h"
 #include "instr_set.h"
 
@@ -76,6 +78,13 @@ struct Cpu::decodedOps Cpu::decodeOprs(uint32_t op) {
     ops.op1Val = (op1 & OPR_VAL_MASK);
     ops.op2Val = (op2 & OPR_VAL_MASK);
 
+    if (ops.op1Type == REG && ops.op2Type == REG) {
+        computeCost += COMPUTE_COST_REG_REG;
+    } else if (ops.op1Type == REG && ops.op2Type == DAT) {
+        computeCost += COMPUTE_COST_REG_DATA;
+    } else if (ops.op1Type == REG && ops.op2Type == ADR) {
+        computeCost += COMPUTE_COST_REG_DATA;
+    }
     //std::cout << "OP1 Val: " << ops.op1Val << std::endl;
     //std::cout << "OP2 Val: " << ops.op2Val << std::endl;
 
@@ -83,7 +92,7 @@ struct Cpu::decodedOps Cpu::decodeOprs(uint32_t op) {
 }
 
 void Cpu::executeOp(uint32_t op) {
-    //std::cout << "CPU: InPut" << (int) op << std::endl;
+    //std::cout << "CPU: InPut " << (int) op << std::endl;
 
     //Decode Operation
     if (((op >> OP_SHIFT)) == MOV) {
@@ -137,7 +146,7 @@ void Cpu::executeOp(uint32_t op) {
     } else if (((op >> OP_SHIFT)) == NOP) {
         std::cout << "CPU: NOP" << std::endl;
     } else {
-        std::cout << "CPU: Invalid: " << (op >> OP_SHIFT) << ' ' << NOP << std::endl;
+        std::cout << "CPU: Invalid: " << (op >> OP_SHIFT) << std::endl;
     }
 }
 
@@ -252,6 +261,7 @@ void Cpu::lshift(uint32_t op) {
     } else {
         return;
     }
+    std::cout << "LSH Result: " << (int) dataRegs[ops.op1Val] << std::endl;
     //this->printRegs();
 }
 
@@ -265,6 +275,7 @@ void Cpu::rshift(uint32_t op) {
     } else {
         return;
     }
+    std::cout << "RSH Result: " << (int) dataRegs[ops.op1Val] << std::endl;
     //this->printRegs();
 }
 
@@ -274,11 +285,9 @@ void Cpu::jmp(uint32_t op) {
     // Do jump logic
     //std::cout << "Cpu::jmp " << (int) op << ' ' << (int) ops.op1Type << std::endl;
     // std::cout << "Cpu::jmp Label" << (std::hex) << ops.op2Val << std::endl;
-    if (ops.op1Type == NO_CON) { // && ops.op2Type == DAT) { OP2 is not considered for jump
+    if (ops.op1Type == NO_CON) { // 
             std::cout << "Cpu::jmp NO_CON INVOKED" << std::endl;
             programCounter = mem.findJumpOffset(ops.op2Val) - 1;
-            //Jump to ops.op1Val
-            //This will need a redeisgn since CPU does not have access to jump offsets which are part of stored class 
     } else if (ops.op1Type == N_ZERO) {
         //std::cout << "Cpu::jmp ZERO INVOKED 2" << std::endl;
         if (statusRegs[Z] == 0) {
@@ -348,6 +357,7 @@ void Cpu::land(uint32_t op) {
         std::cout << "Cpu::land: Invalid AND OP" << std::endl;
         return;
     }
+    std::cout << "AND Result: " << (int) dataRegs[ops.op1Val] << std::endl;
     if (dataRegs[ops.op1Val] == 0)
         statusRegs[Z] = 0x1;
     //this->printRegs();
@@ -365,6 +375,7 @@ void Cpu::lor(uint32_t op) {
         std::cout << "Cpu::land: Invalid OR OP" << std::endl;
         return;
     }
+    std::cout << "OR Result: " << (int) dataRegs[ops.op1Val] << std::endl;
     if (dataRegs[ops.op1Val] == 0)
         statusRegs[Z] = 0x1;
     //this->printRegs();
@@ -382,6 +393,7 @@ void Cpu::lxor(uint32_t op) {
         std::cout << "Cpu::land: Invalid XOR OP" << std::endl;
         return;
     }
+    std::cout << "XOR Result: " << (int) dataRegs[ops.op1Val] << std::endl;
     if (dataRegs[ops.op1Val] == 0)
         statusRegs[Z] = 0x1;
     //this->printRegs();
@@ -397,6 +409,8 @@ void Cpu::lnot(uint32_t op) {
         std::cout << "Cpu::land: Invalid NOT OP" << std::endl;
         return;
     }
+    computeCost += COMPUTE_COST_REG_SINGLE; // Not included in decodedOps for single operand instructions 
+    std::cout << "NOT Result: " << (int) dataRegs[ops.op1Val] << std::endl;
     if (dataRegs[ops.op1Val] == 0)
         statusRegs[Z] = 0x1;
     //this->printRegs();
@@ -440,12 +454,24 @@ uint64_t Cpu::createRegDump () {
     dataStatusCombine <<= 32;
     dataStatusCombine |= statusRegCombine;
 
-    std::cout << std::hex << dataStatusCombine << std::endl;
+    //std::cout << std::hex << dataStatusCombine << std::endl;
     return dataStatusCombine;
 }
 
 uint64_t Cpu::executeAndDump() {
+    struct timeval start, end;
+
+    gettimeofday(&start, NULL);   
     startExecution();
+    gettimeofday(&end, NULL);
+    double time_taken = (end.tv_sec - start.tv_sec) * 1e6;
+    time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
+    std::cout << "Time taken: " << std::fixed
+         << time_taken << std::setprecision(6) << " sec" << std::endl;
+    std::cout << "Compute Cost: " << computeCost << " Units" << std::endl;
+    std::cout << "Memory Cost: " << mem.memoryCost << " Units" << std::endl;
+
+
     return createRegDump();
 }
 

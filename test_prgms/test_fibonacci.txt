@@ -6,7 +6,7 @@
 #0x01 101 301
 01101301
 
-#MOV R3 A // cnt = 10
+#MOV R3 A // cnt = 10 // What's the 10th Fibonacci
 #0x01 103 30A
 0110330A
 
@@ -38,6 +38,6 @@ FF001000
 #0x05 100 001
 05100001
 
-#MOV R3 R0
-#0x01 103 100
-01103100
+#MOV R0 R0 // Move Output to R0 // Not required but a practice
+#0x01 100 100
+01100100
