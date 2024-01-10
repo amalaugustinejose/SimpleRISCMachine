@@ -11,7 +11,11 @@ find_package(GTest REQUIRED)
 include_directories("${PROJECT_SOURCE_DIR}/tests_gtest")
 
 # create the main app
-set(SOURCE_FILES src/instr_set.h src/memory.h src/memory.cpp src/cpu.cpp src/cpu.h)
+set(SOURCE_FILES
+  src/instr_set.h
+  src/LRUCache.h src/LRUCache.cpp
+  src/memory.h src/memory.cpp
+  src/cpu.cpp src/cpu.h)
 add_executable(riscMachine src/main.cpp ${SOURCE_FILES})
 
 add_executable(

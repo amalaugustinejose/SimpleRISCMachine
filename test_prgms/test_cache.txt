@@ -1,0 +1,104 @@
+#Move Data 0xff (255) to R0
+#MOV R0 FF
+#0x01 100 3FF
+011003FF 
+
+#Move Data 0xff (100) to R0
+#MOV R1 0x64
+#0x01 100 3FF
+01101364 
+
+#Move Data 0xff (50) to R0
+#MOV R2 0x32
+#0x01 100 3FF
+01102332 
+
+#Move Data 0xff (25) to R0
+#MOV R3 19
+#0x01 103 3FF
+01103319 
+
+#Store data in Register 0 to offset0x32 // MISS
+#STR R0 @offset0x32
+#0X07 100 232
+07100232
+
+#Store data in Register 1 to offset0x64 // MISS
+#STR R1 @offset0x64
+#0X07 101 264
+07101264
+
+#Load data in offset0x64 to Register 0 // HIT
+#LOD R0 @osffset0x32
+#0x06 100 264
+06100264
+
+#Store data in Register 2 to offset0x25 // MISS - Replacement
+#STR R2 @offset0x25
+#0X07 100 225
+07102225
+
+#Load data in offset0x32 to Register 1 // MISS - Replacement
+#LOD R1 @osffset0x32
+#0x06 101 232
+06101232
+
+#Store data in Register 0 to offset0x32 // HIT
+#STR R0 @offset0x32
+#0X07 100 232
+07100232
+
+#Store data in Register 1 to offset0x64 // MISS - Replacement
+#STR R1 @offset0x64
+#0X07 101 264
+07101264
+
+#Load data in offset0x32 to Register 1 // HIT
+#LOD R1 @osffset0x32
+#0x06 101 232
+06101232
+
+#Load data in offset0x64 to Register 0 // HIT
+#LOD R0 @osffset0x32
+#0x06 100 264
+06100264
+
+#Store data in Register 2 to offset0x25 // MISS - Replacement
+#STR R2 @offset0x25
+#0X07 100 225
+07102225
+
+#Store data in Register 3 to offset0x50 // MISS - Replacement
+#STR R3 @offset0x50
+#0X07 101 250
+07103250
+
+#Load data in offset0x32 to Register 1 // MISS - Replacement
+#LOD R1 @osffset0x32
+#0x06 101 232
+06101232
+
+#Load data in offset0x64 to Register 0 // MISS - Replacement
+#LOD R0 @osffset0x32
+#0x06 100 264
+06100264
+
+#Store data in Register 0 to offset0x32 // HIT
+#STR R0 @offset0x32
+#0X07 100 232
+07100232
+
+#Store data in Register 1 to offset0x64 // HIT
+#STR R1 @offset0x64
+#0X07 101 264
+07101264
+
+#Store data in Register 2 to offset0x25 // MISS - Replacement
+#STR R2 @offset0x25
+#0X07 100 225
+07102225
+
+#Store data in Register 3 to offset0x50 // MISS - Replacement
+#STR R3 @offset0x50
+#0X07 101 250
+07103250

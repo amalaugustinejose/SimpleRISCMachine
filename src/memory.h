@@ -1,9 +1,10 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include "LRUCache.h"
 
-#define MAX_LINE_LENGTH 16
-#define MAX_CODE_LINES 10
+#define MAX_LINE_LENGTH 8
+#define MAX_CODE_LINES 200
 #define MAX_CODE_SIZE MAX_CODE_LINES * MAX_LINE_LENGTH
 #define MAX_DATA_SIZE 0xFF + 1
 
@@ -12,10 +13,13 @@
 #define MEMORY_COST_CACHE_HIT 1
 #define MEMORY_COST_CACHE_MISS 2
 
+#define LRU_CACHE_SIZE 2
+
 class Memory {
 private:
     uint32_t *codeBaseAddr;
     uint8_t *dataBaseAddr;
+    LRUCache *lru;
     //TODO: Type can be reduced to uint8_t
     std::map<uint32_t, int> jumpOffsets;
 

@@ -253,6 +253,7 @@ void Cpu::div(uint32_t op) {
 
 void Cpu::lshift(uint32_t op) {
     struct Cpu::decodedOps ops = decodeOprs(op);
+    statusRegs[Z] = 0;
     //this->printRegs();
     if (ops.op1Type == REG && ops.op2Type == REG) {
         dataRegs[ops.op1Val] = dataRegs[ops.op1Val] << dataRegs[ops.op2Val];
@@ -262,11 +263,14 @@ void Cpu::lshift(uint32_t op) {
         return;
     }
     std::cout << "LSH Result: " << (int) dataRegs[ops.op1Val] << std::endl;
+    if (dataRegs[ops.op1Val] == 0)
+        statusRegs[Z] = 0x1;
     //this->printRegs();
 }
 
 void Cpu::rshift(uint32_t op) {
     struct Cpu::decodedOps ops = decodeOprs(op);
+    statusRegs[Z] = 0;
     //this->printRegs();
     if (ops.op1Type == REG && ops.op2Type == REG) {
         dataRegs[ops.op1Val] = dataRegs[ops.op1Val] >> dataRegs[ops.op2Val];
@@ -276,6 +280,8 @@ void Cpu::rshift(uint32_t op) {
         return;
     }
     std::cout << "RSH Result: " << (int) dataRegs[ops.op1Val] << std::endl;
+    if (dataRegs[ops.op1Val] == 0)
+        statusRegs[Z] = 0x1;
     //this->printRegs();
 }
 
